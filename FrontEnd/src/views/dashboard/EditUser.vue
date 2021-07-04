@@ -1,0 +1,89 @@
+<template>
+  <div class="container">
+    <div class="columns is-multiline">
+      <div class="column is-12">
+        <h1 class="title">Edit User</h1>
+      </div>
+      <div class="column is-6">
+        <form @submit.prevent="submitForm">
+          <div class="field">
+            <label>First Name</label>
+            <div class="control">
+              <input type="text" class="input" v-model="user.first_name" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <div class="control">
+              <input type="text" class="input" v-model="user.last_name" />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <button class="button is-success">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+import { toast } from "bulma-toast";
+export default {
+  name: "EditUser",
+  data() {
+    return {
+      user: {},
+    };
+  },
+  mounted() {
+    this.getUser();
+  },
+  methods: {
+    async getUser() {
+      this.$store.commit("setIsLoading", true);
+
+      const userId = this.$route.params.id;
+
+      axios
+        .get(`/api/v1/teams/user/${userId}`)
+        .then((response) => {
+          this.user = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.$store.commit("setIsLoading", false);
+    },
+    async submitForm() {
+      this.$store.commit("setIsLoading", true);
+
+      const userId = this.$route.params.id;
+      await axios
+        .put(`/api/v1/teams/user/${userId}/`, this.user)
+        .then((response) => {
+          toast({
+            message: "The User was Updated",
+            type: "is-success",
+            dismissible: true,
+            pauseOnHover: true,
+            duration: 2000,
+            position: "top-right",
+          });
+          this.$router.push({
+            name: "MyAccount",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      this.$store.commit("setIsLoading", false);
+    },
+  },
+};
+</script>
