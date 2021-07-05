@@ -12,12 +12,47 @@
 </template>
 <script>
 import axios from "axios";
+import { toast } from "bulma-toast";
 export default {
   name: "Thankyou",
   data() {
     return {};
   },
-  mounted() {},
+  mounted() {
+    axios
+      .post("/api/v1/stripe/check_session/", {
+        session_id: this.$route.query.session_id,
+      })
+      .then((response) => {
+        console.log(response.data);
+        toast({
+          message: "The plan was Changed!",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
+        });
+        this.$store.commit("setTeam", {
+          id: response.data.id,
+          name: response.data.name,
+          plan: response.data.plan.name,
+          max_leads: response.data.plan.max_leads,
+          max_clients: response.data.plan.max_clients,
+        });
+      })
+      .catch((error) => {
+        toast({
+          message: "Something went wrong... !",
+          type: "is-error",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
+        });
+        console.log("Error", error);
+      });
+  },
   methods: {},
 };
 </script>

@@ -113,6 +113,7 @@ export default {
         await axios
           .get("/api/v1/teams/get-my-team/")
           .then((response) => {
+            console.log(response);
             this.$store.commit("setTeam", {
               id: response.data.id,
               name: response.data.name,
