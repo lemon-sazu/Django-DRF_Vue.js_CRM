@@ -32,6 +32,7 @@ class Team(models.Model):
                              on_delete=models.SET_NULL, null=True, blank=True)
     plan_status = models.CharField(
         max_length=20, choices=CHOICES_PLAN_STATUS, default=PLAN_ACTIVE)
+    plan_end_date = models.DateTimeField(null=True, blank=True)
     stripe_customer_id = models.CharField(
         max_length=255, blank=True, null=True)
     stripe_subscription_id = models.CharField(

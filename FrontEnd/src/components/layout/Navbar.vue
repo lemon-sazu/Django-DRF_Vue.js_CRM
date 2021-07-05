@@ -8,13 +8,17 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-end">
-        <router-link :to="{ name: 'Clients' }" class="navbar-item"
-          >Clients</router-link
-        >
-        <router-link to="/dashboard/leads" class="navbar-item"
-          >Leads</router-link
-        >
-        <router-link to="/dashboard/team" class="navbar-item">Team</router-link>
+        <template v-if="$store.state.isAuthenticated">
+          <router-link :to="{ name: 'Clients' }" class="navbar-item"
+            >Clients</router-link
+          >
+          <router-link to="/dashboard/leads" class="navbar-item"
+            >Leads</router-link
+          >
+          <router-link to="/dashboard/team" class="navbar-item"
+            >Team</router-link
+          >
+        </template>
         <div class="navbar-item">
           <div class="buttons">
             <template v-if="!$store.state.isAuthenticated">

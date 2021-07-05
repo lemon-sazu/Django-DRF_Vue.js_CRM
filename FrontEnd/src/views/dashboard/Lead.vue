@@ -12,6 +12,7 @@
           <button @click="convertTolient" class="button is-info">
             Convert to Client
           </button>
+          <button @click="deleteLead()" class="button is-danger">Delete</button>
         </div>
       </div>
       <div class="column is-6">
@@ -58,6 +59,23 @@ export default {
     this.getLead();
   },
   methods: {
+    async deleteLead() {
+      this.$store.commit("setIsLoading", true);
+
+      const leadId = this.$route.params.id;
+
+      await axios
+        .post(`/api/v1/leads/delete/${leadId}/`)
+        .then((response) => {
+          console.log(response.data);
+          this.$router.push({ name: "Leads" });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      this.$store.commit("setIsLoading", false);
+    },
     async getLead() {
       this.$store.commit("setIsLoading", true);
 
@@ -74,6 +92,7 @@ export default {
 
       this.$store.commit("setIsLoading", false);
     },
+
     async convertTolient() {
       this.$store.commit("setIsLoading", true);
 

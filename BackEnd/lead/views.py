@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from team.models import Team
 from django.shortcuts import render
 
@@ -42,3 +44,14 @@ class LeadViewSet(viewsets.ModelViewSet):
             members__in=[self.request.user]).first()
 
         return self.queryset.filter(team=team)
+
+
+@api_view(['POST'])
+def delete_lead(request, lead_id):
+    team = Team.objects.filter(
+        members__in=[request.user]).first()
+
+    lead = team.leads.filter(pk=lead_id)
+    lead.delete()
+
+    return Response({'message': 'The lead was Deleted'})

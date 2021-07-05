@@ -134,11 +134,11 @@ def cancel_plan(request):
     team.plan_status = Team.PLAN_CANCELLED
     team.save()
 
-    try:
-        stripe.api_key = settings.STRIPE_SECRET_KEY
-        stripe.Subsription.delete(team.stripe_subsription_id)
-    except Exception:
-        return Response({'error': 'Something Went Wrong. Please try again.'})
+    # try:
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    stripe.Subscription.delete(team.stripe_subscription_id)
+    # except Exception:
+    #     return Response({'error': 'Something Went Wrong. Please try again.'})
 
     serializer = TeamSerializer(team)
     return Response(serializer.data)

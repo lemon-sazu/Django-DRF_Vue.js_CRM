@@ -46,7 +46,9 @@
       </div>
       <hr />
       <div class="column is-12">
-        <button @click="cancelPLan()">Cancel Plan</button>
+        <button @click="cancelPLan()" class="button is-danger">
+          Cancel Plan
+        </button>
       </div>
     </div>
   </div>
@@ -77,7 +79,7 @@ export default {
     async cancelPLan() {
       this.$store.commit("setIsLoading", true);
 
-      axios.post("/api/v1/teams/cancel_plan/").then((response) => {
+      await axios.post("/api/v1/teams/cancel_plan/").then((response) => {
         this.$store.commit("setTeam", {
           id: response.data.id,
           name: response.data.name,
@@ -93,7 +95,7 @@ export default {
           duration: 2000,
           position: "bottom-right",
         });
-        this.$router.push("/dashboard/team/");
+        this.$router.push("/dashboard/team");
       });
 
       this.$store.commit("setIsLoading", false);

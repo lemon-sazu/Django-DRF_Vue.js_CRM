@@ -8,6 +8,7 @@
           class="button is-light"
           >Edit</router-link
         >
+        <button @click="deleteClient()" class="button is-danger">Delete</button>
       </div>
       <div class="column is-6">
         <div class="box">
@@ -64,6 +65,23 @@ export default {
     this.getClient();
   },
   methods: {
+    async deleteClient() {
+      this.$store.commit("setIsLoading", true);
+
+      const clientId = this.$route.params.id;
+
+      await axios
+        .post(`/api/v1/client/delete/${clientId}/`)
+        .then((response) => {
+          console.log(response.data);
+          this.$router.push({ name: "Clients" });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      this.$store.commit("setIsLoading", false);
+    },
     async getClient() {
       this.$store.commit("setIsLoading", true);
 
